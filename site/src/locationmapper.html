@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>tRippin'</title>
+    <!-- Header -->
+     
+    @@include('./_header.html')
+    <script type="text/javascript" charset="utf8" src="scripts/locationmapper.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" id="location-finder">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <h3>Spot Finder</h3>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+      <div class="row" id="location-form">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <h3>Locations</h3>
+          <div id="addLocationForm">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Location</label>
+                <input type="text" id="location" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Address</label>
+                <input type="text" id="address" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Number</label>
+                <input type="text" id="house" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Street</label>
+                <input type="text" id="street" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>City</label>
+                <input type="text" id="city" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>State</label>
+                <select id="state" class="form-control">
+                  <option value="">Select a state</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label>Postcode</label>
+                <input type="text" id="postcode" class="form-control" required />
+              </div>
+            </div>
+            <button type="button" id="addLocationBtn" class="btn btn-primary mt-3">Add Location</button>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+      <!-- Footer -->
+      @@include('./_footer.html')
+    </div>
+    <!-- Modals -->
+  </body>
+</html>

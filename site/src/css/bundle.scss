@@ -1,0 +1,15 @@
+@use "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@use "../../../node_modules/jquery-ui/dist/themes/smoothness/jquery-ui.min.css";
+@use "../../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css";
+@use "../../../node_modules/datatables.net-autofill-dt/css/autoFill.dataTables.min.css";
+@use "../../../node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css";
+@use "../../../node_modules/datatables.net-colreorder-dt/css/colReorder.dataTables.min.css";
+@use "../../../node_modules/datatables.net-fixedcolumns-dt/css/fixedColumns.dataTables.min.css";
+@use "../../../node_modules/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.min.css";
+@use "../../../node_modules/datatables.net-keytable-dt/css/keyTable.dataTables.min.css";
+@use "../../../node_modules/datatables.net-responsive-dt/css/responsive.dataTables.min.css";
+@use "../../../node_modules/datatables.net-rowgroup-dt/css/rowGroup.dataTables.min.css";
+@use "../../../node_modules/datatables.net-rowreorder-dt/css/rowReorder.dataTables.min.css";
+@use "../../../node_modules/datatables.net-scroller-dt/css/scroller.dataTables.min.css";
+@use "custom.scss";
+

@@ -2,28 +2,28 @@
 <html lang="en">
   <head>
     <title>tRippin'</title>
-    @@include('./shared/_htmlHeader.html')
+    @@include('./_shared/_htmlHeader.html')
   </head>
   <body class="bg-light">
-    @@include('./layout/_layoutSidebar.html')
+    @@include('./_layout/_layoutSidebar.html')
     <div class="content" id="content">
-      @@include('./layout/_layoutHeader.html')
+      @@include('./_layout/_layoutHeader.html')
 
       <!-- APP START --------------------------------------------------------------- -->
       <div id="locationFinder" class="container">
         <!-- LOCATION FINDER--------------------- -->
-        @@include('./partials/_locationFinder.html')
+        @@include('./location/_locationFinder.html')
         <!-- LOCATION TABLE--------------------- -->
-        @@include('./partials/_locationTable.html')
+        @@include('./location/_locationTable.html')
         <!-- LOCATION MODAL--------------------- -->
-        @@include('./modals/_locationEditModal.html')
+        @@include('./location/_locationEditModal.html')
       </div>
      
       <!-- APP END ----------------------------------------------------------------- -->
 
-      @@include('./layout/_layoutFooter.html')
+      @@include('./_layout/_layoutFooter.html')
     </div>
   </body>
-  @@include('./shared/_htmlFooter.html')
-  <script type="text/javascript" charset="utf8" src="scripts/location.js"></script>
+  @@include('./_shared/_htmlFooter.html')
+  <script type="text/javascript" charset="utf8" src="scripts/location/location.js"></script>
 </html>

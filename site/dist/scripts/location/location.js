@@ -317,4 +317,3 @@ $(function () {
     $('#locationsTable').DataTable().ajax.reload();
   });
 });
-

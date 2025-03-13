@@ -1,273 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tRippin'</title>
-    @@include('./_header.html')
+    @@include('./shared/_htmlHeader.html')
   </head>
   <body class="bg-light">
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-      <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="location">Location</a></li>
-        <li><a href="locationmapper">Mapper</a></li>
-        <li><a href="locationrefresh">Refresher</a></li>
-      </ul>
-    </div>
-
-    <!-- Main Content -->
+    @@include('./layout/_layoutSidebar.html')
     <div class="content" id="content">
-      <!-- Top Header -->
-      <div class="top-header d-flex justify-content-between align-items-center">
-        <span class="toggle-btn" id="toggle-btn">&#9776;</span>
-        <h4 class="mr-3">tRippin'</h4>
+      @@include('./layout/_layoutHeader.html')
+
+      <!-- APP START --------------------------------------------------------------- -->
+      <div id="locationFinder" class="container">
+        <!-- LOCATION FINDER--------------------- -->
+        @@include('./views/_locationFinder.html')
+        <!-- LOCATION TABLE--------------------- -->
+        @@include('./views/_locationTable.html')
+        <!-- LOCATION MODAL--------------------- -->
+        @@include('./modals/_locationEditModal.html')
       </div>
+      <script type="text/javascript" charset="utf8" src="scripts/location.js"></script>
+      <!-- APP END ----------------------------------------------------------------- -->
 
-      <!-- Dashboard Content
-      <div class="container mt-4">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Welcome to the Dashboard!</h5>
-                <p>This is a simple dashboard template with a responsive design and a slide-out navigation.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">More Information</h5>
-                <p>Customize your layout with Bootstrap and jQuery UI for a better user experience.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
-      <div class="container">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-10 mt-4">
-              <h3>Location Finder</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-5">
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="findlocation" placeholder="Enter location" />
-                <label class="form-label">Enter spot</label>
-                <ul id="suggestions" class="list-group"></ul>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <button type="button" id="searchLocationBtn" class="btn btn-primary btn-sm">Find</button>
-              <button type="button" id="addLocationBtn" class="btn btn-success btn-sm">Create</button>
-              <button type="button" id="washLocationBtn" class="btn btn-dark btn-sm">Wash</button>
-              <button type="button" id="rinseLocationBtn" class="btn btn-dark btn-sm">Rinse</button>
-              <button type="button" id="kitchenLocationBtn" class="btn btn-secondary btn-sm">Kitchen Sink</button>
-              <div class="ml-10 fs10 mt-1"><input type="checkbox" id="enableAutoSuggest" /> Enable Auto-Suggestions</div>
-              <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mt-2 kitchen d-none" id="addLocationForm">
-            <div class="col-sm-5">
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="shortaddress" placeholder="Short address" />
-                <label class="form-label">Short address</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="location" placeholder="Location" />
-                <label class="form-label">Location</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="house" placeholder="Street Number" />
-                <label class="form-label">House Number</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="street" placeholder="Street" />
-                <label class="form-label">Street</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="city" placeholder="City" />
-                <label class="form-label">City</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="postcode" placeholder="Postcode" />
-                <label class="form-label">Postcode</label>
-              </div>
-              <div class="form-floating mb-2">
-                <select id="state" class="form-control">
-                  <option value="">State</option>
-                </select>
-                <label class="form-label"></label>
-              </div>
-            </div>
-            <div class="col-sm-5">
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="phone" placeholder="Phone" />
-                <label class="form-label">Phone</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="website" placeholder="Website" />
-                <label class="form-label">Website</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="wikidata" placeholder="Wikidata" />
-                <label class="form-label">Wikidata</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="wikipedia" placeholder="Wikipedia" />
-                <label class="form-label">Wikipedia</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="option" placeholder="Option" />
-                <label class="form-label">Option</label>
-              </div>
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="address" placeholder="Complete Address" />
-                <label class="form-label">Complete address</label>
-              </div>
-              <div class="row">
-                <div class="col-sm-5">
-                  <select id="status" class="form-control">
-                    <option value="0">Sys Status</option>
-                    <option value="1">Open</option>
-                    <option value="2">Set</option>
-                    <option value="3">Archived</option>
-                  </select>
-                </div>
-                <div class="col-sm-5">
-                  <select id="type" class="form-control">
-                    <option value="NA">Spot Type</option>
-                    <option value="Historic">Historic</option>
-                    <option value="Local Attraction">Local Attraction</option>
-                    <option value="Museum">Museum</option>
-                    <option value="National Park">National Park</option>
-                    <option value="Historic">Theme Park</option>
-                    <option value="Hotel">Hotel</option>
-                    <option value="Campground">Campground</option>
-                  </select>
-                </div>
-                <div class="col-sm-5">
-                  <select id="region" class="form-control">
-                    <option value="NA">Region</option>
-                    <option value="BFE">BFE</option>
-                    <option value="Central">Central</option>
-                    <option value="Midwest">Midwest</option>
-                    <option value="Mountain">Mountain</option>
-                    <option value="Northeast">Northeast</option>
-                    <option value="West">West</option>
-                    <option value="South">South</option>
-                    
-                  </select>
-                </div>
-                <div class="col-sm-5">
-                  <select id="destype" class="form-control">
-                    <option value="NA">Loc Type</option>
-                    <option value="Destination">Destination</option>
-                    <option value="Waypoint">Waypoint</option>
-                    <option value="Overnight">Overnight</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-5"></div>
-            <div class="col-sm-10">
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="extra" placeholder="Extra" />
-                <label class="form-label">Extra</label>
-              </div>
-            </div>
-            <div class="col-sm-10">
-              <div class="form-floating mb-2">
-                <input class="form-control" type="text" id="description" placeholder="Description" />
-                <label class="form-label">Description</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="container-fluid">
-          <div class="row mt-2">
-            <div class="col-sm-10">
-              <hr />
-              <h3>Found Locations</h3>
-
-              <table id="locationsTable" class="table table-striped" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th>Location</th>
-                    <th>House</th>
-                    <th>Street</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Postcode</th>
-                    <th>Region</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
-        </div>
-        @@include('./_footer.html')
-      </div>
-    </div>
-    <!-- Modals -->
-    <div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editLocationModalLabel">Edit Location</h5>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="editId" />
-            <div class="form-group">
-              <label>Location:</label>
-              <input type="text" id="editLocation" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>Address:</label>
-              <input type="text" id="editAddress" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>House Number:</label>
-              <input type="text" id="edithouse" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>Street:</label>
-              <input type="text" id="editStreet" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>City:</label>
-              <input type="text" id="editCity" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>State:</label>
-              <input type="text" id="editState" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>Postcode:</label>
-              <input type="text" id="editPostcode" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>Region:</label>
-              <input type="text" id="editRegion" class="form-control" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="saveEditBtn" class="btn btn-primary">Save Changes</button>
-          </div>
-        </div>
-      </div>
+      @@include('./layout/_layoutFooter.html')
     </div>
   </body>
-  @@include('./_scripts.html')
-  <script type="text/javascript" charset="utf8" src="scripts/location.js"></script>
+  @@include('./shared/_htmlFooter.html')
 </html>

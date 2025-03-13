@@ -10,8 +10,8 @@ const rename = require("gulp-rename");
 // Paths
 const paths = {
   html: "./site/src/*.html",
-  partials: "./site/src/partials/*.html",
-  scripts: "./site/src/js/**/*.js",
+  partials: "./site/src/views/**/*.html",
+  scripts: "./site/src/scripts/**/*.js",
   styles: "./site/src/css/**/*.scss",
   output: "./site/dist",
 };
@@ -23,7 +23,7 @@ gulp.task("html", function () {
     .pipe(
       fileInclude({
         prefix: "@@",
-        basepath: "./site/src/partials/",
+        basepath: "./site/src/views/",
       })
     )
     .pipe(gulp.dest(paths.output))
@@ -60,7 +60,7 @@ gulp.task("js", function () {
         paths.scripts])
     .pipe(concat("bundle.min.js"))
     .pipe(uglify())
-    .pipe(gulp.dest(paths.output + "/js"))
+    .pipe(gulp.dest(paths.output + "/scripts"))
     .pipe(connect.reload());
 });
 

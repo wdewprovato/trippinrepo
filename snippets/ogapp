@@ -1,0 +1,307 @@
+const express = require("express");
+const app = express();
+const path = require("path");
+const db = require("./database");
+const cors = require("cors");
+const axios = require("axios");
+const cache = {}; // Simple in-memory cache
+const CACHE_TTL = 300000; // Cache expires in 5 minutes (300,000 ms)
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Serve static files ------------------------------------
+const PUBLIC_DIR = path.join(__dirname, "../../site/dist");
+const NODE_MODULES_DIR = path.join(__dirname, "../../node_modules");
+app.use(express.static(PUBLIC_DIR));
+app.use("/libs", express.static(NODE_MODULES_DIR));
+
+// Middleware to serve .html files even when extension is omitted ------------------------------------
+app.use((req, res, next) => {
+  let filePath = path.join(PUBLIC_DIR, req.path + ".html");
+  if (req.path !== "/" && req.path.indexOf(".") === -1) {
+    res.sendFile(filePath, (err) => {
+      if (err) next(); // Proceed to 404 if file doesn't exist
+    });
+  } else {
+    next();
+  }
+});
+
+// Default route to serve index.html ------------------------------------
+app.get("/", (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+});
+
+// API Route: Fetch data from SQLite ------------------------------------
+app.get("/api/locations", (req, res) => {
+  const sql = "SELECT * FROM locations";
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ data: rows });
+  });
+});
+
+// API Route: Add a new location ------------------------------------
+app.post("/api/locations", (req, res) => {
+  const { location, address, house, street, city, state, postcode } = req.body;
+
+  if (!location) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  const sql = `INSERT INTO locations (location, address, house, street, city, state, postcode) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const params = [location, address, house, street, city, state, postcode];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: "Location added successfully", id: this.lastID });
+  });
+});
+
+// API Route: Update a location by ID ------------------------------------
+app.put("/api/locations/:id", (req, res) => {
+  const locationId = req.params.id;
+  const { location, address, house, street, city, state, postcode } = req.body;
+  if (
+    !locationId ||
+    !location ||
+    !address ||
+    !house ||
+    !street ||
+    !city ||
+    !state ||
+    !postcode
+  ) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+  const sql = `UPDATE locations SET location = ?, address = ?, house = ?, 
+               street = ?, city = ?, state = ?, postcode = ? WHERE id = ?`;
+  const params = [
+    location,
+    address,
+    house,
+    street,
+    city,
+    state,
+    postcode,
+    locationId,
+  ];
+  db.run(sql, params, function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+    res.json({ message: "Record updated successfully", id: locationId });
+  });
+});
+
+// API Route: Delete a location by ID ------------------------------------
+app.delete("/api/locations/:id", (req, res) => {
+  const locationId = req.params.id;
+  if (!locationId) {
+    return res.status(400).json({ error: "Missing ID parameter" });
+  }
+  const sql = "DELETE FROM locations WHERE id = ?";
+  db.run(sql, [locationId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+    res.json({ message: "Record deleted successfully", id: locationId });
+  });
+});
+
+// API Route: Fetch all states ------------------------------------
+app.get("/api/states", (req, res) => {
+  const sql = "SELECT stateabbr, statelong FROM states ORDER BY statelong";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ data: rows });
+  });
+});
+
+// API Route: Search location using OpenStreetMap ------------------------------------
+app.get("/api/findlocation", async (req, res) => {
+  const query = req.query.q;
+  const stateAbbreviations = {
+    Alabama: "AL",
+    Alaska: "AK",
+    Arizona: "AZ",
+    Arkansas: "AR",
+    California: "CA",
+    Colorado: "CO",
+    Connecticut: "CT",
+    Delaware: "DE",
+    Florida: "FL",
+    Georgia: "GA",
+    Hawaii: "HI",
+    Idaho: "ID",
+    Illinois: "IL",
+    Indiana: "IN",
+    Iowa: "IA",
+    Kansas: "KS",
+    Kentucky: "KY",
+    Louisiana: "LA",
+    Maine: "ME",
+    Maryland: "MD",
+    Massachusetts: "MA",
+    Michigan: "MI",
+    Minnesota: "MN",
+    Mississippi: "MS",
+    Missouri: "MO",
+    Montana: "MT",
+    Nebraska: "NE",
+    Nevada: "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    Ohio: "OH",
+    Oklahoma: "OK",
+    Oregon: "OR",
+    Pennsylvania: "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    Tennessee: "TN",
+    Texas: "TX",
+    Utah: "UT",
+    Vermont: "VT",
+    Virginia: "VA",
+    Washington: "WA",
+    "West Virginia": "WV",
+    Wisconsin: "WI",
+    Wyoming: "WY",
+  };
+  if (!query) {
+    return res.status(400).json({ error: "Missing query parameter 'q'" });
+  }
+  // Check if result is in cache and still valid
+  if (cache[query] && Date.now() - cache[query].timestamp < CACHE_TTL) {
+    console.log(`Cache hit for query: "${query}"`);
+    return res.json(cache[query].data);
+  }
+  try {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/search`,
+      {
+        params: {
+          q: query,
+          format: "json",
+          addressdetails: 1,
+          limit: 1,
+          extratags: 1,
+        },
+        headers: {
+          "User-Agent": "tRippin/0.1 wdew01@yahoo.com",
+        },
+      }
+    );
+
+    if (response.data.length === 0) {
+      return res.status(404).json({ error: "No address found" });
+    }
+
+    const result = response.data[0];
+    const locationData = {
+      address: result.display_name,
+      houseNumber: result.address.house_number || "",
+      street: result.address.road || "",
+      city:
+        result.address.city ||
+        result.address.town ||
+        result.address.village ||
+        "",
+      state: result.address.state || "",
+      postcode: result.address.postcode || "",
+    };
+
+    // Store response in cache
+    cache[query] = {
+      data: locationData,
+      timestamp: Date.now(),
+    };
+
+    console.log(`Cached response for query: "${query}"`);
+
+    res.json(locationData);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching location data" });
+  }
+});
+
+// API Route: Fetch address suggestions from OpenStreetMap
+app.get("/api/autosuggest", async (req, res) => {
+  const query = req.query.q;
+
+  if (!query) {
+    return res.status(400).json({ error: "Missing query parameter 'q'" });
+  }
+
+  // Check if result exists in cache and is still valid
+  if (cache[query] && Date.now() - cache[query].timestamp < CACHE_TTL) {
+    return res.json(cache[query].data); // Return cached result
+  }
+
+  try {
+    const response = await axios.get(
+      "https://nominatim.openstreetmap.org/search",
+      {
+        params: {
+          q: query,
+          format: "json",
+          addressdetails: 1,
+          limit: 5,
+        },
+        headers: {
+          "User-Agent": "tRippin/0.1 wdew01@yahoo.com",
+        },
+      }
+    );
+
+    // Store response in cache
+    cache[query] = {
+      data: response.data,
+      timestamp: Date.now(),
+    };
+
+    console.log(`Cached response for query: "${query}"`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching location data" });
+  }
+});
+
+// API Route: Output all cached data for debugging
+app.get("/api/cache", (req, res) => {
+  console.log("Current cache contents:", cache);
+  res.json(cache);
+});
+
+// API Route to Clear Cache
+app.delete("/api/cache", (req, res) => {
+  Object.keys(cache).forEach(key => delete cache[key]);
+  console.log("Cache cleared.");
+  res.json({ message: "Cache cleared successfully." });
+});
+
+module.exports = app;

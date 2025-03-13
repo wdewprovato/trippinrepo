@@ -1,0 +1,35 @@
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      location TEXT,
+      address TEXT,
+      shortaddress TEXT,
+      house TEXT,
+      street TEXT,
+      city TEXT,
+      state TEXT,
+      postcode TEXT,
+      website TEXT,
+      wikidata TEXT,
+      wikipedia TEXT,
+      phone TEXT,
+      description TEXT,
+      extra TEXT,
+      type TEXT,
+	  option TEXT,
+      status INTEGER
+
+      { data: "location" },
+      { data: "shortaddress" },
+      { data: "city" },
+      { data: "state" },
+      { data: "postcode" },
+	  
+	        { data: "location" },
+      { data: "house" },
+      { data: "street" },
+      { data: "city" },
+      { data: "state" },
+      { data: "postcode" },
+	  
+	  phone, website, wikidata, wikipedia
+	  
+	  description, extra, type, option, status

@@ -1,0 +1,143 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 mt-4">
+      <h3>Location Finder</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5">
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="findlocation" placeholder="Enter location" />
+        <label class="form-label">Enter spot</label>
+        <ul id="suggestions" class="list-group"></ul>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <button type="button" id="searchLocationBtn" class="btn btn-primary btn-sm">Find</button>
+      <button type="button" id="addLocationBtn" class="btn btn-success btn-sm">Create</button>
+      <button type="button" id="washLocationBtn" class="btn btn-dark btn-sm">Wash</button>
+      <button type="button" id="rinseLocationBtn" class="btn btn-dark btn-sm">Rinse</button>
+      <button type="button" id="kitchenLocationBtn" class="btn btn-secondary btn-sm">Kitchen Sink</button>
+      <div class="ml-10 fs10 mt-1"><input type="checkbox" id="enableAutoSuggest" /> Enable Auto-Suggestions</div>
+      <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2 kitchen d-none" id="addLocationForm">
+    <div class="col-sm-5">
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="shortaddress" placeholder="Short address" />
+        <label class="form-label">Short address</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="location" placeholder="Location" />
+        <label class="form-label">Location</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="house" placeholder="Street Number" />
+        <label class="form-label">House Number</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="street" placeholder="Street" />
+        <label class="form-label">Street</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="city" placeholder="City" />
+        <label class="form-label">City</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="postcode" placeholder="Postcode" />
+        <label class="form-label">Postcode</label>
+      </div>
+      <div class="form-floating mb-2">
+        <select id="state" class="form-control">
+          <option value="">State</option>
+        </select>
+        <label class="form-label"></label>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="phone" placeholder="Phone" />
+        <label class="form-label">Phone</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="website" placeholder="Website" />
+        <label class="form-label">Website</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="wikidata" placeholder="Wikidata" />
+        <label class="form-label">Wikidata</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="wikipedia" placeholder="Wikipedia" />
+        <label class="form-label">Wikipedia</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="option" placeholder="Option" />
+        <label class="form-label">Option</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="address" placeholder="Complete Address" />
+        <label class="form-label">Complete address</label>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <select id="status" class="form-control">
+            <option value="0">Sys Status</option>
+            <option value="1">Open</option>
+            <option value="2">Set</option>
+            <option value="3">Archived</option>
+          </select>
+        </div>
+        <div class="col-sm-5">
+          <select id="type" class="form-control">
+            <option value="NA">Spot Type</option>
+            <option value="Historic">Historic</option>
+            <option value="Local Attraction">Local Attraction</option>
+            <option value="Museum">Museum</option>
+            <option value="National Park">National Park</option>
+            <option value="Historic">Theme Park</option>
+            <option value="Hotel">Hotel</option>
+            <option value="Campground">Campground</option>
+          </select>
+        </div>
+        <div class="col-sm-5">
+          <select id="region" class="form-control">
+            <option value="NA">Region</option>
+            <option value="BFE">BFE</option>
+            <option value="Central">Central</option>
+            <option value="Midwest">Midwest</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Northeast">Northeast</option>
+            <option value="West">West</option>
+            <option value="South">South</option>
+          </select>
+        </div>
+        <div class="col-sm-5">
+          <select id="destype" class="form-control">
+            <option value="NA">Loc Type</option>
+            <option value="Destination">Destination</option>
+            <option value="Waypoint">Waypoint</option>
+            <option value="Overnight">Overnight</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5"></div>
+    <div class="col-sm-10">
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="extra" placeholder="Extra" />
+        <label class="form-label">Extra</label>
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <div class="form-floating mb-2">
+        <input class="form-control" type="text" id="description" placeholder="Description" />
+        <label class="form-label">Description</label>
+      </div>
+    </div>
+  </div>
+</div>

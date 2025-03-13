@@ -59,7 +59,7 @@ gulp.task("js", function () {
         "node_modules/datatables.net-select/js/dataTables.select.min.js", 
         paths.scripts])
     .pipe(concat("bundle.min.js"))
-    .pipe(uglify())
+    // /.pipe(uglify())
     .pipe(gulp.dest(paths.output + "/scripts"))
     .pipe(connect.reload());
 });
@@ -92,4 +92,4 @@ gulp.task("watch", function () {
 });
 
 // Default Task (Run All Tasks)
-gulp.task("default", gulp.parallel("html", "styles", "js", "scripts", "server", "watch"));
+gulp.task("default", gulp.parallel("html", "styles", "js", "server", "watch"));

@@ -12,17 +12,18 @@
       <!-- APP START --------------------------------------------------------------- -->
       <div id="locationFinder" class="container">
         <!-- LOCATION FINDER--------------------- -->
-        @@include('./views/_locationFinder.html')
+        @@include('./partials/_locationFinder.html')
         <!-- LOCATION TABLE--------------------- -->
-        @@include('./views/_locationTable.html')
+        @@include('./partials/_locationTable.html')
         <!-- LOCATION MODAL--------------------- -->
         @@include('./modals/_locationEditModal.html')
       </div>
-      <script type="text/javascript" charset="utf8" src="scripts/location.js"></script>
+     
       <!-- APP END ----------------------------------------------------------------- -->
 
       @@include('./layout/_layoutFooter.html')
     </div>
   </body>
   @@include('./shared/_htmlFooter.html')
+  <script type="text/javascript" charset="utf8" src="scripts/location.js"></script>
 </html>

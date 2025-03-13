@@ -44,7 +44,6 @@ $(function () {
       },
     ],
   });
-
   // Handle Add Button Click ---------------------------------------
   $("#addLocationBtn").on("click", function () {
     var formData = {
